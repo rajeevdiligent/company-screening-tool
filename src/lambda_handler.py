@@ -41,14 +41,47 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     """
     
     try:
-        # Extract company name from event
-        company_name = event.get('company_name')
+        # Handle both API Gateway and direct Lambda invocation
+        company_name = None
+        
+        # Check if this is an API Gateway request
+        if 'httpMethod' in event and 'body' in event:
+            # API Gateway request
+            try:
+                if event.get('body'):
+                    body = json.loads(event['body'])
+                    company_name = body.get('company_name')
+                else:
+                    company_name = None
+            except json.JSONDecodeError:
+                return {
+                    'statusCode': 400,
+                    'headers': {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Headers': 'Content-Type',
+                        'Access-Control-Allow-Methods': 'POST, GET, OPTIONS'
+                    },
+                    'body': json.dumps({
+                        'error': 'Invalid JSON in request body'
+                    })
+                }
+        else:
+            # Direct Lambda invocation
+            company_name = event.get('company_name')
+        
         if not company_name:
             return {
                 'statusCode': 400,
+                'headers': {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    'Access-Control-Allow-Methods': 'POST, GET, OPTIONS'
+                },
                 'body': json.dumps({
                     'error': 'Missing required parameter: company_name',
-                    'usage': 'Provide company_name in the event payload'
+                    'usage': 'Provide company_name in the request body (API Gateway) or event payload (direct invocation)'
                 })
             }
         

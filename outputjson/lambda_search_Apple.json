@@ -1,0 +1,83 @@
+{
+  "company_name": "Apple",
+  "legal_name": "Apple Inc.",
+  "official_name": "",
+  "registration_number": "001-36743",
+  "incorporation_date": "1977-01-03",
+  "incorporation_country": "United States",
+  "jurisdiction": "California, United States",
+  "business_type": "Corporation",
+  "industry": "Technology",
+  "headquarters": "1 Apple Park Way, Cupertino, California, 95014, United States",
+  "address": "",
+  "website": "https://www.apple.com/",
+  "description": "Apple Inc. is an American multinational technology company that designs, develops, and sells consumer electronics, computer software, and online services.",
+  "products_services": [
+    "Consumer electronics (iPhone, iPad, Mac, Apple Watch, AirPods)",
+    "Computer software (iOS, macOS, watchOS, tvOS)",
+    "Online services (App Store, Apple Music, iCloud)"
+  ],
+  "alternate_names": [
+    "Apple Computer, Inc."
+  ],
+  "identifiers": {
+    "LEI": "HWUPKR0MPOU8FGXBT394",
+    "DUNS": "173152994",
+    "EIN": "94-2404170",
+    "CIK": "0000320193"
+  },
+  "key_executives": [
+    "Tim Cook - CEO",
+    "Jeff Williams - COO",
+    "Luca Maestri - CFO",
+    "Katherine Adams - General Counsel",
+    "Johny Srouji - Senior VP of Hardware Technologies",
+    "Craig Federighi - Senior VP of Software Engineering",
+    "Deirdre O'Brien - Senior VP of Retail + People",
+    "Eddy Cue - Senior VP of Services",
+    "Greg Joswiak - Senior VP of Worldwide Marketing"
+  ],
+  "subsidiaries": [
+    "Apple Sales International",
+    "Apple Operations International",
+    "Apple Services",
+    "Apple Retail",
+    "Apple Distribution"
+  ],
+  "parent_company": "None",
+  "stock_symbol": "AAPL",
+  "market_cap": "Approximately $2.5 trillion USD (as of the latest available data)",
+  "revenue": "",
+  "annual_revenue": "Approximately $365.8 billion USD (2021)",
+  "employees": "Approximately 164,000 (as of 2021)",
+  "founded_year": "1976",
+  "regulatory_filings": [
+    "https://www.sec.gov/Archives/edgar/data/320193/000032019318000145/a10-k20189292018.htm"
+  ],
+  "sources": [
+    "https://en.wikipedia.org/wiki/Criticism_of_Apple_Inc.",
+    "https://en.wikipedia.org/wiki/Apple_Corps_v_Apple_Computer",
+    "https://simple.wikipedia.org/wiki/Apple_Inc.",
+    "https://en.wikipedia.org/wiki/List_of_Apple_products",
+    "https://apple.fandom.com/wiki/Apple_Inc.",
+    "https://www.apple.com/",
+    "https://en.wikipedia.org/wiki/Outline_of_Apple_Inc.",
+    "https://en.wikipedia.org/wiki/Apple_Park",
+    "https://en.wikipedia.org/wiki/Apple_Inc.",
+    "https://en.wikipedia.org/wiki/Marketing_of_Apple_Inc.",
+    "https://en.wikipedia.org/wiki/History_of_Apple_Inc.",
+    "https://en.wikipedia.org/wiki/List_of_mergers_and_acquisitions_by_Apple",
+    "https://www.sec.gov/Archives/edgar/data/320193/000032019318000145/a10-k20189292018.htm",
+    "https://fr.wikipedia.org/wiki/Apple",
+    "https://en.wikipedia.org/wiki/Apple_supply_chain"
+  ],
+  "confidence_level": "High",
+  "last_updated": "2025-10-03T20:33:27.109578",
+  "lambda_execution": {
+    "request_id": "a09e400a-eab4-42fa-bd17-a13b69313d9c",
+    "function_name": "company-screening-tool",
+    "function_version": "$LATEST",
+    "memory_limit": "1024",
+    "remaining_time": 178715
+  }
+}
