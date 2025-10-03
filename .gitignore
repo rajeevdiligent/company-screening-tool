@@ -67,3 +67,6 @@ credentials
 # API keys and secrets
 secrets.json
 config.json
+
+# Lambda deployment packages
+*.zip
