@@ -12,9 +12,12 @@ Key Success Patterns Integrated:
 - Enhanced FORM 20-F searches for foreign companies
 - Enhanced FORM 8-K searches for current events and material changes
 - Enhanced DEF 14A Proxy Statement searches for executive and governance data
+- AGGRESSIVE CRUNCHBASE searches (12 queries) for private company executives
+- AGGRESSIVE PITCHBOOK searches (12 queries) for private equity management data
+- AGGRESSIVE LINKEDIN searches (15 queries) for current executive profiles
 - Wikipedia comprehensive coverage
 - Multiple identifier extraction (LEI, DUNS, EIN, CIK)
-- Executive and financial data targeting
+- Enhanced executive and financial data targeting for private companies
 
 Usage:
     python optimized_company_search.py --company "Company Name"
@@ -247,6 +250,10 @@ CRITICAL SUCCESS PATTERNS (from Tesla: 001-34756, Walmart: 001-06991):
 9. FORM 20-F contains jurisdiction, incorporation country, and registration details
 10. FORM 8-K filings contain current events, executive changes, and material information
 11. DEF 14A Proxy Statements contain detailed executive information and governance data
+12. CRUNCHBASE profiles contain comprehensive executive data for private companies
+13. PITCHBOOK provides detailed management information for private equity-backed companies
+14. LINKEDIN profiles show current executive positions and recent leadership changes
+15. For PRIVATE/ACQUIRED companies, prioritize Crunchbase, PitchBook, and LinkedIn over SEC filings
 
 MANDATORY FIELD COMPLETION:
 - legal_name: Extract from SEC filing headers or Wikipedia infobox
@@ -262,7 +269,7 @@ MANDATORY FIELD COMPLETION:
 - products_services: Main offerings from business descriptions
 - alternate_names: Former names, abbreviations, trade names
 - identifiers: Extract LEI, DUNS, EIN, CIK when mentioned
-- key_executives: CEO, CFO, other C-suite from recent sources
+- key_executives: CEO, CFO, CTO, COO from Crunchbase/PitchBook/LinkedIn (prioritize current data)
 - subsidiaries: Major subsidiary companies
 - stock_symbol: NYSE/NASDAQ ticker
 - market_cap: Current market capitalization
@@ -271,16 +278,19 @@ MANDATORY FIELD COMPLETION:
 - founded_year: Year company was founded
 - regulatory_filings: SEC filing URLs when found
 
-PROVEN SUCCESSFUL SOURCES:
+PROVEN SUCCESSFUL SOURCES (PRIORITIZED FOR EXECUTIVE DATA):
 - SEC EDGAR filings (highest priority for registration numbers)
 - SEC FORM 10-K filings (critical for non-listed companies)
 - SEC FORM 20-F filings (essential for foreign companies on US exchanges)
 - SEC FORM 8-K filings (current events, executive changes, material information)
 - SEC DEF 14A Proxy Statements (executive compensation, governance, board details)
+- CRUNCHBASE (CRITICAL for private company executives, CEO/CFO data, management teams)
+- PITCHBOOK (ESSENTIAL for private equity companies, executive profiles, board members)
+- LINKEDIN (VITAL for current executive information, C-suite profiles, leadership teams)
 - Wikipedia company pages (comprehensive overview data)
 - Corporate websites (official information)
 - Financial databases (Bloomberg, Reuters, Yahoo Finance)
-- Business directories (Crunchbase, OpenCorporates)
+- Business directories (OpenCorporates)
 
 EXTRACTION REQUIREMENTS:
 1. Fill EVERY field - no empty fields allowed if data exists
@@ -454,12 +464,62 @@ class OptimizedCompanySearcher:
             f'"{company_name}" subsidiaries companies'
         ]
         
-        # Successful data source queries
+        # AGGRESSIVE CRUNCHBASE SEARCHES - Critical for private company executive data
+        crunchbase_queries = [
+            f'site:crunchbase.com "{company_name}" executives',
+            f'site:crunchbase.com "{company_name}" CEO CFO',
+            f'site:crunchbase.com "{company_name}" leadership team',
+            f'site:crunchbase.com "{company_name}" company profile',
+            f'site:crunchbase.com "{company_name}" funding investors',
+            f'site:crunchbase.com "{company_name}" board members',
+            f'site:crunchbase.com "{company_name}" management team',
+            f'site:crunchbase.com "{company_name}" key people',
+            f'"{company_name}" crunchbase executives leadership',
+            f'"{company_name}" crunchbase CEO CFO CTO',
+            f'"{company_name}" crunchbase company information',
+            f'"{company_name}" crunchbase profile management'
+        ]
+        
+        # AGGRESSIVE PITCHBOOK SEARCHES - Essential for private equity and executive data
+        pitchbook_queries = [
+            f'site:pitchbook.com "{company_name}" executives',
+            f'site:pitchbook.com "{company_name}" management team',
+            f'site:pitchbook.com "{company_name}" CEO CFO',
+            f'site:pitchbook.com "{company_name}" company profile',
+            f'site:pitchbook.com "{company_name}" leadership',
+            f'site:pitchbook.com "{company_name}" board directors',
+            f'site:pitchbook.com "{company_name}" private equity',
+            f'site:pitchbook.com "{company_name}" key personnel',
+            f'"{company_name}" pitchbook executives management',
+            f'"{company_name}" pitchbook CEO CFO leadership',
+            f'"{company_name}" pitchbook company data',
+            f'"{company_name}" pitchbook private company'
+        ]
+        
+        # AGGRESSIVE LINKEDIN SEARCHES - Critical for current executive information
+        linkedin_queries = [
+            f'site:linkedin.com "{company_name}" CEO',
+            f'site:linkedin.com "{company_name}" CFO',
+            f'site:linkedin.com "{company_name}" CTO',
+            f'site:linkedin.com "{company_name}" executives',
+            f'site:linkedin.com "{company_name}" leadership team',
+            f'site:linkedin.com "{company_name}" management',
+            f'site:linkedin.com "{company_name}" company page',
+            f'site:linkedin.com "{company_name}" board members',
+            f'site:linkedin.com "{company_name}" senior management',
+            f'site:linkedin.com "{company_name}" C-suite',
+            f'"{company_name}" linkedin CEO profile',
+            f'"{company_name}" linkedin CFO executive',
+            f'"{company_name}" linkedin company executives',
+            f'"{company_name}" linkedin leadership team',
+            f'"{company_name}" linkedin management profiles'
+        ]
+        
+        # Enhanced data source queries
         source_queries = [
             f'site:bloomberg.com "{company_name}" profile',
             f'site:reuters.com "{company_name}" company',
             f'site:yahoo.com "{company_name}" profile',
-            f'site:crunchbase.com "{company_name}"',
             f'site:opencorporates.com "{company_name}"'
         ]
         
@@ -480,7 +540,7 @@ class OptimizedCompanySearcher:
                 f'"{company_name} Corp" company information'
             ])
         
-        # Combine all optimized queries
+        # Combine all optimized queries with new aggressive searches prioritized
         all_queries = (
             core_queries +
             registration_queries +
@@ -488,6 +548,9 @@ class OptimizedCompanySearcher:
             form_20f_queries +
             form_8k_queries +
             proxy_def14a_queries +
+            crunchbase_queries +      # HIGH PRIORITY: Private company executive data
+            pitchbook_queries +       # HIGH PRIORITY: Private equity and management data  
+            linkedin_queries +        # HIGH PRIORITY: Current executive profiles
             identifier_queries +
             corporate_queries +
             source_queries +
@@ -522,7 +585,13 @@ class OptimizedCompanySearcher:
                     num_results = 12
                 elif i < 44:  # DEF 14A Proxy queries (high priority for executive data)
                     num_results = 12
-                elif i < 49:  # Identifier queries
+                elif i < 56:  # CRUNCHBASE queries (CRITICAL for private company executives)
+                    num_results = 15
+                elif i < 68:  # PITCHBOOK queries (CRITICAL for private equity data)
+                    num_results = 15
+                elif i < 83:  # LINKEDIN queries (CRITICAL for current executive profiles)
+                    num_results = 15
+                elif i < 88:  # Identifier queries
                     num_results = 10
                 else:  # Other queries
                     num_results = 8
