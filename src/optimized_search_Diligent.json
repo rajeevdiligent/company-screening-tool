@@ -8,14 +8,14 @@
   "jurisdiction": "Delaware, United States",
   "business_type": "Corporation",
   "industry": "Software as a Service (SaaS)",
-  "headquarters": "1111 19th Street NW, Suite 700, Washington, DC 20036, USA",
+  "headquarters": "1111 19th Street NW, Suite 700, Washington, DC 20036, United States",
   "address": "",
   "website": "https://www.diligent.com/",
-  "description": "Diligent Corporation is a software as a service company that enables groups to share and collaborate information for board meetings. It is a modern governance company providing comprehensive governance software.",
+  "description": "Diligent Corporation is a software as a service company that enables groups to share and collaborate information for board meetings. It provides governance software solutions to improve and simplify modern governance.",
   "products_services": [
-    "Governance software",
+    "Governance software solutions",
     "Board management software",
-    "Secure data exchange for board of directors"
+    "Collaboration tools for board meetings"
   ],
   "alternate_names": [
     "Diligent"
@@ -44,18 +44,18 @@
     "https://www.sec.gov/Archives/edgar/data/1433269/000104746916011110/a2227754z10-k.htm"
   ],
   "sources": [
-    "https://www.diligent.com/company/about-us",
-    "https://www.diligent.com/",
-    "https://www.sec.gov/Archives/edgar/data/1433269/000104746916011110/a2227754z10-k.htm",
-    "https://en.wikipedia.org/wiki/Daily_News_and_Analysis",
-    "https://en.wikipedia.org/wiki/Doron_Kempel",
-    "https://en.wikipedia.org/wiki/Category:Financial_software_companies",
     "https://www.wikiwand.com/en/Talk:Diligent_Corporation",
-    "https://en.wikipedia.org/wiki/File_talk:Diligent_Corporation_company_logo.png",
+    "https://en.wikipedia.org/wiki/Doron_Kempel",
+    "https://en.wikipedia.org/wiki/Daily_News_and_Analysis",
+    "https://www.sec.gov/Archives/edgar/data/1433269/000104746916011110/a2227754z10-k.htm",
+    "https://www.diligent.com/",
+    "https://en.wikipedia.org/wiki/Category:Financial_software_companies",
     "https://en.wikipedia.org/wiki/Brian_Stafford_(businessman)",
+    "https://en.wikipedia.org/wiki/File_talk:Diligent_Corporation_company_logo.png",
+    "https://www.linkedin.com/company/diligentglobal",
     "https://en.wikipedia.org/wiki/Diligent_Corporation",
-    "https://www.linkedin.com/company/diligentglobal"
+    "https://www.diligent.com/company/about-us"
   ],
   "confidence_level": "High",
-  "last_updated": "2025-10-03T21:52:59.556814"
+  "last_updated": "2025-10-04T00:44:09.152081"
 }

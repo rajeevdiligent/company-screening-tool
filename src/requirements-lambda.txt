@@ -1,0 +1,28 @@
+# AWS Lambda Requirements for Company Screening Tool
+# Optimized for Lambda deployment with minimal package size
+
+# Core dependencies
+boto3==1.40.17
+requests==2.31.0
+python-dotenv==1.0.0
+charset-normalizer==3.3.2
+urllib3==2.0.7
+certifi==2023.11.17
+idna==3.6
+
+# JSON handling (built into Python 3.9+)
+# asyncio (built into Python 3.9+)
+# logging (built into Python 3.9+)
+# dataclasses (built into Python 3.9+)
+
+# Optional: For enhanced JSON serialization
+# ujson==5.8.0  # Uncomment for faster JSON processing
+
+# Note: AWS Lambda runtime includes:
+# - boto3 and botocore (latest versions)
+# - requests
+# - urllib3
+# - certifi
+# - python-dateutil
+# - six
+# - s3transfer

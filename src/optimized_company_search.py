@@ -14,8 +14,8 @@ Key Success Patterns Integrated:
 - Enhanced DEF 14A Proxy Statement searches for executive and governance data
 - COMPANY-SPECIFIC search queries with business entity keywords
 - EXCLUSION filters to eliminate people, products, and non-corporate entities
-- AGGRESSIVE CRUNCHBASE searches (12 queries) for private company executives
-- AGGRESSIVE PITCHBOOK searches (12 queries) for private equity management data
+- REMOVED: Crunchbase searches (0% success rate)
+- REMOVED: PitchBook searches (0% success rate)
 - AGGRESSIVE LINKEDIN searches (15 queries) for current executive profiles
 - Wikipedia comprehensive coverage
 - Multiple identifier extraction (LEI, DUNS, EIN, CIK)
@@ -39,18 +39,39 @@ import boto3
 from dotenv import load_dotenv
 from botocore.exceptions import ClientError, NoCredentialsError
 
+# Import SEC data extractors
+try:
+    from sec_filing_enhancer import SECFilingEnhancer
+except ImportError:
+    SECFilingEnhancer = None
+
+try:
+    from search_based_sec_extractor import SearchBasedSECExtractor
+except ImportError:
+    SearchBasedSECExtractor = None
+
 # Load environment variables
 load_dotenv()
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler('optimized_company_search.log'),
-        logging.StreamHandler()
-    ]
-)
+# Configure logging (Lambda-compatible)
+import os
+if os.environ.get('AWS_LAMBDA_FUNCTION_NAME'):
+    # Lambda environment - only use StreamHandler
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        handlers=[logging.StreamHandler()]
+    )
+else:
+    # Local environment - use both file and stream handlers
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        handlers=[
+            logging.FileHandler('optimized_company_search.log'),
+            logging.StreamHandler()
+        ]
+    )
 logger = logging.getLogger(__name__)
 
 @dataclass
@@ -167,12 +188,20 @@ class AWSNovaLLM:
     def _initialize_aws_session(self):
         """Initialize AWS session"""
         try:
-            self.session = boto3.Session(profile_name=self.profile_name)
+            # Use profile only in local environment, not in Lambda
+            if os.environ.get('AWS_LAMBDA_FUNCTION_NAME'):
+                # Lambda environment - use default credentials (IAM role)
+                self.session = boto3.Session()
+                logger.info("AWS session initialized with Lambda IAM role")
+            else:
+                # Local environment - use specified profile
+                self.session = boto3.Session(profile_name=self.profile_name)
+                logger.info(f"AWS session initialized with profile: {self.profile_name}")
+            
             self.bedrock_client = self.session.client(
                 'bedrock-runtime',
                 region_name=self.region
             )
-            logger.info(f"AWS session initialized with profile: {self.profile_name}")
             
         except NoCredentialsError:
             logger.error(f"AWS credentials not found for profile: {self.profile_name}")
@@ -258,10 +287,8 @@ CRITICAL SUCCESS PATTERNS (from Tesla: 001-34756, Walmart: 001-06991):
 9. FORM 20-F contains jurisdiction, incorporation country, and registration details
 10. FORM 8-K filings contain current events, executive changes, and material information
 11. DEF 14A Proxy Statements contain detailed executive information and governance data
-12. CRUNCHBASE profiles contain comprehensive executive data for private companies
-13. PITCHBOOK provides detailed management information for private equity-backed companies
-14. LINKEDIN profiles show current executive positions and recent leadership changes
-15. For PRIVATE/ACQUIRED companies, prioritize Crunchbase, PitchBook, and LinkedIn over SEC filings
+12. LINKEDIN profiles show current executive positions and recent leadership changes
+13. For PRIVATE/ACQUIRED companies, prioritize SEC filings, Wikipedia, and LinkedIn over other sources
 
 MANDATORY FIELD COMPLETION:
 - legal_name: Extract from SEC filing headers or Wikipedia infobox
@@ -277,7 +304,7 @@ MANDATORY FIELD COMPLETION:
 - products_services: Main offerings from business descriptions
 - alternate_names: Former names, abbreviations, trade names
 - identifiers: Extract LEI, DUNS, EIN, CIK when mentioned
-- key_executives: CEO, CFO, CTO, COO from Crunchbase/PitchBook/LinkedIn (prioritize current data)
+- key_executives: CEO, CFO, CTO, COO from SEC filings/Wikipedia/LinkedIn (prioritize current data)
 - subsidiaries: Major subsidiary companies
 - stock_symbol: NYSE/NASDAQ ticker
 - market_cap: Current market capitalization
@@ -292,9 +319,7 @@ PROVEN SUCCESSFUL SOURCES (PRIORITIZED FOR EXECUTIVE DATA):
 - SEC FORM 20-F filings (essential for foreign companies on US exchanges)
 - SEC FORM 8-K filings (current events, executive changes, material information)
 - SEC DEF 14A Proxy Statements (executive compensation, governance, board details)
-- CRUNCHBASE (CRITICAL for private company executives, CEO/CFO data, management teams)
-- PITCHBOOK (ESSENTIAL for private equity companies, executive profiles, board members)
-- LINKEDIN (VITAL for current executive information, C-suite profiles, leadership teams)
+- LINKEDIN (MODERATE for current executive information, C-suite profiles, leadership teams)
 - Wikipedia company pages (comprehensive overview data)
 - Corporate websites (official information)
 - Financial databases (Bloomberg, Reuters, Yahoo Finance)
@@ -365,6 +390,8 @@ class OptimizedCompanySearcher:
     def __init__(self):
         self.serper_api = None
         self.nova_llm = None
+        self.sec_enhancer = None
+        self.search_sec_extractor = None
         self._initialize_services()
     
     def _initialize_services(self):
@@ -379,6 +406,20 @@ class OptimizedCompanySearcher:
         aws_region = os.getenv('AWS_REGION', 'us-east-1')
         
         self.nova_llm = AWSNovaLLM(aws_profile, aws_region)
+        
+        # Initialize search-based SEC extractor (primary method)
+        if SearchBasedSECExtractor:
+            self.search_sec_extractor = SearchBasedSECExtractor()
+            logger.info("Search-based SEC extractor initialized")
+        else:
+            logger.warning("Search-based SEC extractor not available")
+        
+        # Initialize SEC enhancer for fallback
+        if SECFilingEnhancer:
+            self.sec_enhancer = SECFilingEnhancer()
+            logger.info("SEC filing enhancer initialized as fallback")
+        else:
+            logger.warning("SEC filing enhancer not available")
         
         logger.info("All services initialized successfully")
     
@@ -474,37 +515,9 @@ class OptimizedCompanySearcher:
             f'"{company_name}" corporation subsidiaries companies'
         ]
         
-        # AGGRESSIVE CRUNCHBASE SEARCHES - Company-specific for private company executive data
-        crunchbase_queries = [
-            f'site:crunchbase.com "{company_name}" company executives',
-            f'site:crunchbase.com "{company_name}" corporation CEO CFO',
-            f'site:crunchbase.com "{company_name}" company leadership team',
-            f'site:crunchbase.com "{company_name}" company profile business',
-            f'site:crunchbase.com "{company_name}" company funding investors',
-            f'site:crunchbase.com "{company_name}" corporation board members',
-            f'site:crunchbase.com "{company_name}" company management team',
-            f'site:crunchbase.com "{company_name}" business key people',
-            f'"{company_name}" company crunchbase executives leadership',
-            f'"{company_name}" corporation crunchbase CEO CFO CTO',
-            f'"{company_name}" business crunchbase company information',
-            f'"{company_name}" company crunchbase profile management'
-        ]
-        
-        # AGGRESSIVE PITCHBOOK SEARCHES - Company-specific for private equity and executive data
-        pitchbook_queries = [
-            f'site:pitchbook.com "{company_name}" company executives',
-            f'site:pitchbook.com "{company_name}" corporation management team',
-            f'site:pitchbook.com "{company_name}" company CEO CFO',
-            f'site:pitchbook.com "{company_name}" company profile business',
-            f'site:pitchbook.com "{company_name}" company leadership',
-            f'site:pitchbook.com "{company_name}" corporation board directors',
-            f'site:pitchbook.com "{company_name}" company private equity',
-            f'site:pitchbook.com "{company_name}" business key personnel',
-            f'"{company_name}" company pitchbook executives management',
-            f'"{company_name}" corporation pitchbook CEO CFO leadership',
-            f'"{company_name}" business pitchbook company data',
-            f'"{company_name}" company pitchbook private company'
-        ]
+        # REMOVED: Crunchbase and PitchBook queries (0% success rate, wasting ~36 seconds)
+        # These platforms block search engine indexing or require authentication
+        # Executive data is successfully extracted from SEC filings, Wikipedia, and pattern matching
         
         # AGGRESSIVE LINKEDIN SEARCHES - Company-specific for current executive information
         linkedin_queries = [
@@ -569,9 +582,8 @@ class OptimizedCompanySearcher:
             form_20f_queries +
             form_8k_queries +
             proxy_def14a_queries +
-            crunchbase_queries +      # HIGH PRIORITY: Private company executive data
-            pitchbook_queries +       # HIGH PRIORITY: Private equity and management data  
-            linkedin_queries +        # HIGH PRIORITY: Current executive profiles
+            # REMOVED: crunchbase_queries + pitchbook_queries (0% success rate)
+            linkedin_queries +        # MODERATE PRIORITY: Some success for company pages
             identifier_queries +
             corporate_queries +
             source_queries +
@@ -582,12 +594,18 @@ class OptimizedCompanySearcher:
         return all_queries
     
     async def search_company(self, company_name: str) -> CompanyInfo:
-        """Perform optimized company search"""
+        """Perform optimized company search with SEC data prioritized"""
         logger.info(f"Starting optimized search for: {company_name}")
         
         company_info = CompanyInfo(company_name=company_name)
         
+        # STEP 1: Initialize basic company info (search-based SEC extraction will happen after search)
+        logger.info("STEP 1: Initializing company research")
+        
         try:
+            # STEP 2: COMPLEMENTARY WEB SEARCH (to fill remaining gaps)
+            logger.info("STEP 2: Performing complementary web search")
+            
             search_queries = self.generate_optimized_queries(company_name)
             
             # Perform searches with optimized result counts
@@ -608,13 +626,10 @@ class OptimizedCompanySearcher:
                     num_results = 12
                 elif i < 50:  # DEF 14A Proxy queries (high priority for executive data)
                     num_results = 12
-                elif i < 62:  # CRUNCHBASE queries (CRITICAL for private company executives)
+                # REMOVED: Crunchbase (i < 62) and PitchBook (i < 74) ranges - 24 queries eliminated
+                elif i < 65:  # LINKEDIN queries (MODERATE for current executive profiles) - shifted from 89
                     num_results = 15
-                elif i < 74:  # PITCHBOOK queries (CRITICAL for private equity data)
-                    num_results = 15
-                elif i < 89:  # LINKEDIN queries (CRITICAL for current executive profiles)
-                    num_results = 15
-                elif i < 94:  # Identifier queries
+                elif i < 70:  # Identifier queries - shifted from 94
                     num_results = 10
                 else:  # Other queries
                     num_results = 8
@@ -636,7 +651,25 @@ class OptimizedCompanySearcher:
             
             logger.info(f"Found {len(unique_results)} unique search results")
             
-            # Analyze with Nova LLM
+            # STEP 2A: Extract SEC data directly from search results (PRIMARY METHOD)
+            if unique_results and self.search_sec_extractor:
+                try:
+                    logger.info("STEP 2A: Extracting SEC data from search results")
+                    company_dict = asdict(company_info)
+                    enhanced_dict = self.search_sec_extractor.enhance_company_data_from_search(
+                        company_dict, unique_results, company_name
+                    )
+                    
+                    # Update company_info with search-extracted SEC data
+                    for key, value in enhanced_dict.items():
+                        if hasattr(company_info, key):
+                            setattr(company_info, key, value)
+                    
+                    logger.info("Search-based SEC extraction completed")
+                except Exception as e:
+                    logger.error(f"Search-based SEC extraction failed: {e}")
+            
+            # STEP 2B: Analyze with Nova LLM
             if unique_results:
                 analysis = self.nova_llm.analyze_company_data(unique_results, company_name)
                 
@@ -644,6 +677,29 @@ class OptimizedCompanySearcher:
                     self._update_company_info(company_info, analysis, unique_results)
                 else:
                     logger.error(f"LLM analysis failed: {analysis['error']}")
+            
+            # STEP 3: FALLBACK SEC API LOOKUP (only if search-based extraction missed data)
+            if self.sec_enhancer:
+                try:
+                    # Check if we still need SEC data
+                    has_cik = company_info.identifiers and company_info.identifiers.get('CIK', 'Not available') != 'Not available'
+                    has_filings = company_info.regulatory_filings and company_info.regulatory_filings != ['Not available']
+                    
+                    if not has_cik or not has_filings:
+                        logger.info("STEP 3: Fallback SEC API lookup for missing data")
+                        company_dict = asdict(company_info)
+                        final_enhanced_dict = self.sec_enhancer.enhance_company_data(company_dict, company_name)
+                        
+                        # Update company_info with any additional SEC data found
+                        for key, value in final_enhanced_dict.items():
+                            if hasattr(company_info, key):
+                                setattr(company_info, key, value)
+                        
+                        logger.info("Fallback SEC API lookup completed")
+                    else:
+                        logger.info("STEP 3: Skipping SEC API fallback - search-based extraction was sufficient")
+                except Exception as e:
+                    logger.error(f"Fallback SEC API lookup failed: {e}")
             
             return company_info
             
