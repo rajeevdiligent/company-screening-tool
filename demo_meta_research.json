@@ -1,0 +1,57 @@
+{
+  "company_name": "Meta Inc",
+  "legal_name": "Meta Platforms, Inc.",
+  "official_name": "Meta Platforms, Inc.",
+  "registration_number": "3696043",
+  "incorporation_date": "2004-07-29",
+  "incorporation_country": "United States",
+  "jurisdiction": "Delaware, United States",
+  "business_type": "Corporation",
+  "industry": "Technology, Social Media",
+  "headquarters": "1 Meta Way, Menlo Park, CA 94025, United States",
+  "address": "1 Meta Way, Menlo Park, CA 94025, United States",
+  "website": "meta.com",
+  "description": "Meta Platforms, Inc. operates social networking platforms and develops virtual reality and augmented reality technologies. The company connects people through Facebook, Instagram, WhatsApp, and Messenger, and is building the metaverse through Reality Labs.",
+  "products_services": "Facebook, Instagram, WhatsApp, Messenger, Reality Labs, Oculus VR, Portal devices, Workplace",
+  "alternate_names": [
+    "Facebook Inc.",
+    "Meta Inc",
+    "Facebook, Inc."
+  ],
+  "identifiers": {
+    "LEI": "549300V6K2U1M44GTV82",
+    "DUNS": "80-533-1262",
+    "EIN": "20-1665019",
+    "CIK": "0001326801"
+  },
+  "key_executives": [
+    "Mark Zuckerberg - Chairman and CEO",
+    "Susan Li - CFO",
+    "Chris Cox - Chief Product Officer",
+    "Jennifer Newstead - Chief Legal Officer"
+  ],
+  "subsidiaries": [
+    "Facebook Technologies, LLC",
+    "Instagram LLC",
+    "WhatsApp Inc.",
+    "Oculus VR, LLC"
+  ],
+  "parent_company": "",
+  "stock_symbol": "META",
+  "market_cap": "$850 billion",
+  "revenue": "$134.9 billion (2023)",
+  "annual_revenue": "$134.9 billion (2023)",
+  "employees": "77,805",
+  "founded_year": "2004",
+  "regulatory_filings": [
+    "Form 10-K 2023",
+    "Form 10-Q Q3 2024",
+    "Form 8-K Recent"
+  ],
+  "sources": [
+    "https://sec.gov/edgar/browse/?CIK=1326801",
+    "https://investor.fb.com/",
+    "https://about.meta.com/company-info/"
+  ],
+  "last_updated": "2025-10-03T16:13:44.931296"
+}

@@ -1,0 +1,72 @@
+{
+  "company_name": "SAP SE",
+  "legal_name": "SAP SE",
+  "official_name": "",
+  "registration_number": "001-14976",
+  "incorporation_date": "1972-06-01",
+  "incorporation_country": "Germany",
+  "jurisdiction": "Baden-Württemberg, Germany",
+  "business_type": "Societas Europaea (SE)",
+  "industry": "Enterprise software",
+  "headquarters": "Dietmar-Hopp-Allee 16, 69190 Walldorf, Germany",
+  "address": "",
+  "website": "https://www.sap.com",
+  "description": "SAP SE is a German multinational software company that makes enterprise software to manage business operations and customer relations. It is the world's largest vendor of enterprise resource planning (ERP) software and the third-largest publicly traded software company by revenue.",
+  "products_services": [
+    "Enterprise Resource Planning (ERP)",
+    "Customer Relationship Management (CRM)",
+    "Supply Chain Management (SCM)",
+    "Product Lifecycle Management (PLM)",
+    "Business Intelligence (BI)",
+    "Human Capital Management (HCM)",
+    "Industry-specific solutions"
+  ],
+  "alternate_names": [
+    "SAP AG",
+    "Systems, Applications, and Products in Data Processing"
+  ],
+  "identifiers": {
+    "LEI": "529900P78Y8Q02B8V066",
+    "DUNS": "Not available",
+    "EIN": "Not available",
+    "CIK": "0001000184"
+  },
+  "key_executives": [
+    "Christian Klein - CEO",
+    "Lukasz Czerwinski - CFO"
+  ],
+  "subsidiaries": [
+    "SAP America, Inc.",
+    "SAP Labs India",
+    "SAP France",
+    "SAP Japan"
+  ],
+  "parent_company": "Not applicable",
+  "stock_symbol": "SAP",
+  "market_cap": "€160.5 billion (as of 2023)",
+  "revenue": "",
+  "annual_revenue": "$30.0 billion (2022)",
+  "employees": "110,000 (as of 2023)",
+  "founded_year": "1972",
+  "regulatory_filings": [
+    "https://www.sec.gov/Archives/edgar/data/1000184/000110465925017815/sap-20241224x20f.htm",
+    "https://www.sec.gov/Archives/edgar/data/1000184/000110465924029038/sap-20231231x20f.htm"
+  ],
+  "sources": [
+    "https://en.wikipedia.org/wiki/Category:SAP_SE",
+    "https://zh.wikipedia.org/zh-cn/%E6%80%9D%E7%88%B1%E6%99%AE",
+    "https://zh.wikipedia.org/zh-tw/%E6%80%9D%E7%88%B1%E6%99%AE",
+    "https://en.wikipedia.org/wiki/Category:SAP_SE_acquisitions",
+    "https://en.wikipedia.org/wiki/List_of_SAP_products",
+    "https://zh.m.wikipedia.org/zh-hk/SAP_AG",
+    "https://www.sap.com/about/company/history.html",
+    "https://www.sec.gov/Archives/edgar/data/1000184/000110465925017815/sap-20241224x20f.htm",
+    "https://en.wikipedia.org/wiki/SAP",
+    "https://simple.wikipedia.org/wiki/SAP",
+    "https://en.wikipedia.org/wiki/SAP_ERP",
+    "https://www.sec.gov/Archives/edgar/data/1000184/000110465924029038/sap-20231231x20f.htm",
+    "https://en.wikipedia.org/wiki/SAP_and_unions"
+  ],
+  "confidence_level": "High",
+  "last_updated": "2025-10-03T17:40:49.435184"
+}

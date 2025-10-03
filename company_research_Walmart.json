@@ -1,0 +1,53 @@
+{
+  "company_name": "Walmart",
+  "legal_name": "Walmart Inc.",
+  "official_name": "",
+  "registration_number": "001-06991",
+  "incorporation_date": "1969-10-31",
+  "incorporation_country": "United States",
+  "jurisdiction": "Delaware, United States",
+  "business_type": "Corporation",
+  "industry": "Retail",
+  "headquarters": "702 SW 8th Street, Bentonville, Arkansas, United States",
+  "address": "",
+  "website": "https://corporate.walmart.com",
+  "description": "Walmart is a people-led, tech-powered omnichannel retailer dedicated to helping people save money and live better.",
+  "products_services": "Discount department stores, hypermarkets, grocery stores, and e-commerce services.",
+  "alternate_names": [
+    "Wal-Mart Stores, Inc."
+  ],
+  "identifiers": {
+    "LEI": "549300TV7LZ4W1L20W90",
+    "DUNS": "006207651",
+    "EIN": "71-0415188",
+    "CIK": "0000104169"
+  },
+  "key_executives": [
+    "Doug McMillon - CEO",
+    "John David Rainey - CFO"
+  ],
+  "subsidiaries": [
+    "Walmart U.S.",
+    "Walmart International",
+    "Sam's Club"
+  ],
+  "parent_company": "None",
+  "stock_symbol": "WMT",
+  "market_cap": "USD 400 billion (approximate as of the latest available data)",
+  "revenue": "",
+  "annual_revenue": "USD 572.75 billion (2023)",
+  "employees": "2,100,000 (2023)",
+  "founded_year": "1962",
+  "regulatory_filings": [
+    "https://www.sec.gov/Archives/edgar/data/104169/000010416923000040/wmt-20230131.htm",
+    "https://www.sec.gov/Archives/edgar/data/104169/000010416923000041/wmt-20230131.htm"
+  ],
+  "sources": [
+    "https://corporate.walmart.com/about",
+    "https://sco.wikipedia.org/wiki/Walmart",
+    "https://en.wikipedia.org/wiki/Sam_Walton",
+    "https://simple.wikipedia.org/wiki/Walmart",
+    "https://en.wikipedia.org/wiki/Walmart"
+  ],
+  "last_updated": "2025-10-03T17:02:40.470529"
+}

@@ -1,0 +1,65 @@
+{
+  "company_name": "Broadcom",
+  "legal_name": "Broadcom Inc.",
+  "official_name": "",
+  "registration_number": "001-33494",
+  "incorporation_date": "2018-03-05",
+  "incorporation_country": "United States",
+  "jurisdiction": "Delaware, United States",
+  "business_type": "Corporation",
+  "industry": "Semiconductor and infrastructure software",
+  "headquarters": "1320 Ridder Park Drive, San Jose, California, 95131, United States",
+  "address": "",
+  "website": "https://www.broadcom.com",
+  "description": "Broadcom Inc. is an American multinational designer, developer, manufacturer, and global supplier of a wide range of semiconductor and infrastructure software products.",
+  "products_services": [
+    "Semiconductors",
+    "Infrastructure software",
+    "Wireless and broadband communication products"
+  ],
+  "alternate_names": [
+    "Broadcom Corporation",
+    "Avago Technologies"
+  ],
+  "identifiers": {
+    "LEI": "Not available",
+    "DUNS": "Not available",
+    "EIN": "Not available",
+    "CIK": "0001388197"
+  },
+  "key_executives": [
+    "Hock E. Tan - President and CEO",
+    "Kirsten M. Spears - CFO",
+    "Charlie Kawwas - President, Semiconductor Solutions Group"
+  ],
+  "subsidiaries": [
+    "Broadcom Corporation",
+    "Brocade Communications Systems",
+    "CA Technologies"
+  ],
+  "parent_company": "Not applicable",
+  "stock_symbol": "AVGO",
+  "market_cap": "Approximately $200 billion USD (as of 2023)",
+  "revenue": "",
+  "annual_revenue": "Approximately $26 billion USD (2022)",
+  "employees": "Approximately 20,000 (as of 2023)",
+  "founded_year": "1961 (as part of Hewlett-Packard), 1998 (as Broadcom Corporation), 2016 (as Broadcom Inc. after merger with Avago Technologies)",
+  "regulatory_filings": [
+    "https://www.sec.gov/Archives/edgar/data/1388197/000119312523023979/d418961d10k.htm"
+  ],
+  "sources": [
+    "https://en.wikipedia.org/wiki/Henry_Nicholas",
+    "https://en.wikipedia.org/wiki/Qualcomm_Inc._v._Broadcom_Corp.",
+    "https://ko.wikipedia.org/wiki/%EB%B8%8C%EB%A1%9C%EB%93%9C%EC%BB%B4",
+    "https://en.wikipedia.org/wiki/CA_Technologies",
+    "https://en.wikipedia.org/wiki/Broadcom_Corporation",
+    "https://www.broadcom.com/company/about-us/executives/charlie-kawwas",
+    "https://www.broadcom.com/company/about-us/company-history",
+    "https://en.wikipedia.org/wiki/Category:Broadcom",
+    "https://en.wikipedia.org/wiki/Broadcom",
+    "https://broadcomfoundation.org/",
+    "https://www.wikiwand.com/en/articles/Broadcom_Corporation"
+  ],
+  "confidence_level": "High",
+  "last_updated": "2025-10-03T17:59:07.625114"
+}
