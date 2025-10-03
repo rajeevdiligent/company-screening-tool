@@ -12,6 +12,8 @@ Key Success Patterns Integrated:
 - Enhanced FORM 20-F searches for foreign companies
 - Enhanced FORM 8-K searches for current events and material changes
 - Enhanced DEF 14A Proxy Statement searches for executive and governance data
+- COMPANY-SPECIFIC search queries with business entity keywords
+- EXCLUSION filters to eliminate people, products, and non-corporate entities
 - AGGRESSIVE CRUNCHBASE searches (12 queries) for private company executives
 - AGGRESSIVE PITCHBOOK searches (12 queries) for private equity management data
 - AGGRESSIVE LINKEDIN searches (15 queries) for current executive profiles
@@ -233,7 +235,13 @@ class AWSNovaLLM:
         search_data = "\n".join(formatted_results)
         
         prompt = f"""
-You are an expert business researcher. Extract COMPLETE information about {company_name} from the search results.
+You are an expert business researcher. Extract COMPLETE information about {company_name} AS A COMPANY/CORPORATION from the search results.
+
+CRITICAL: Focus ONLY on {company_name} as a BUSINESS ENTITY. Ignore any results about:
+- People with the same name (individuals, celebrities, athletes, politicians)
+- Products or services with the same name
+- Places or locations with the same name
+- Other non-corporate entities
 
 SEARCH RESULTS:
 {search_data}
@@ -377,36 +385,38 @@ class OptimizedCompanySearcher:
     def generate_optimized_queries(self, company_name: str) -> List[str]:
         """Generate optimized search queries based on successful patterns"""
         
-        # Proven successful query patterns from Tesla and Walmart extractions
+        # COMPANY-SPECIFIC core queries (exclude people, products, other entities)
         core_queries = [
-            f'"{company_name}" Wikipedia',
-            f'site:wikipedia.org "{company_name}"',
-            f'"{company_name}" SEC 10-K Edgar',
-            f'site:sec.gov "{company_name}" 10-K'
+            f'"{company_name}" company corporation Wikipedia',
+            f'site:wikipedia.org "{company_name}" company corporation',
+            f'"{company_name}" company SEC 10-K Edgar',
+            f'site:sec.gov "{company_name}" corporation 10-K',
+            f'"{company_name}" business entity company profile',
+            f'"{company_name}" corporation headquarters address'
         ]
         
-        # High-success registration queries (Tesla: 001-34756, Walmart: 001-06991)
+        # COMPANY-SPECIFIC registration queries (Tesla: 001-34756, Walmart: 001-06991)
         registration_queries = [
-            f'"{company_name}" "Commission File Number" SEC',
-            f'"{company_name}" SEC filing "001-" registration',
-            f'site:sec.gov "{company_name}" "Commission File Number"',
-            f'"{company_name}" EDGAR "File Number" incorporation',
-            f'site:edgar.sec.gov "{company_name}" incorporation',
-            f'"{company_name}" SEC 10-K "state of incorporation"',
-            f'"{company_name}" annual report incorporation details',
-            f'"{company_name}" proxy statement incorporation'
+            f'"{company_name}" corporation "Commission File Number" SEC',
+            f'"{company_name}" company SEC filing "001-" registration',
+            f'site:sec.gov "{company_name}" corporation "Commission File Number"',
+            f'"{company_name}" company EDGAR "File Number" incorporation',
+            f'site:edgar.sec.gov "{company_name}" corporation incorporation',
+            f'"{company_name}" company SEC 10-K "state of incorporation"',
+            f'"{company_name}" corporation annual report incorporation details',
+            f'"{company_name}" company proxy statement incorporation'
         ]
         
-        # Enhanced SEC FORM 10-K searches for non-listed companies
+        # COMPANY-SPECIFIC SEC FORM 10-K searches for non-listed companies
         form_10k_queries = [
-            f'site:sec.gov "{company_name}" "FORM 10-K"',
-            f'"{company_name}" "FORM 10-K" SEC filing',
-            f'site:edgar.sec.gov "{company_name}" "FORM 10-K"',
-            f'"{company_name}" "FORM 10-K" incorporation details',
-            f'"{company_name}" "FORM 10-K" registration number',
-            f'site:sec.gov "{company_name}" "FORM 10-K" Delaware',
-            f'"{company_name}" "FORM 10-K" "state of incorporation"',
-            f'"{company_name}" "FORM 10-K" "Commission File Number"'
+            f'site:sec.gov "{company_name}" corporation "FORM 10-K"',
+            f'"{company_name}" company "FORM 10-K" SEC filing',
+            f'site:edgar.sec.gov "{company_name}" corporation "FORM 10-K"',
+            f'"{company_name}" company "FORM 10-K" incorporation details',
+            f'"{company_name}" corporation "FORM 10-K" registration number',
+            f'site:sec.gov "{company_name}" corporation "FORM 10-K" Delaware',
+            f'"{company_name}" company "FORM 10-K" "state of incorporation"',
+            f'"{company_name}" corporation "FORM 10-K" "Commission File Number"'
         ]
         
         # Enhanced SEC FORM 20-F searches for foreign companies
@@ -454,95 +464,106 @@ class OptimizedCompanySearcher:
             f'"{company_name}" CUSIP identifier'
         ]
         
-        # Executive and financial data queries
+        # COMPANY-SPECIFIC executive and financial data queries
         corporate_queries = [
-            f'"{company_name}" CEO CFO executives 2024',
-            f'site:sec.gov "{company_name}" executive officers',
-            f'"{company_name}" annual revenue 2024 2023',
-            f'"{company_name}" market cap employees',
-            f'"{company_name}" headquarters address',
-            f'"{company_name}" subsidiaries companies'
+            f'"{company_name}" company CEO CFO executives 2024',
+            f'site:sec.gov "{company_name}" corporation executive officers',
+            f'"{company_name}" company annual revenue 2024 2023',
+            f'"{company_name}" corporation market cap employees',
+            f'"{company_name}" company headquarters address',
+            f'"{company_name}" corporation subsidiaries companies'
         ]
         
-        # AGGRESSIVE CRUNCHBASE SEARCHES - Critical for private company executive data
+        # AGGRESSIVE CRUNCHBASE SEARCHES - Company-specific for private company executive data
         crunchbase_queries = [
-            f'site:crunchbase.com "{company_name}" executives',
-            f'site:crunchbase.com "{company_name}" CEO CFO',
-            f'site:crunchbase.com "{company_name}" leadership team',
-            f'site:crunchbase.com "{company_name}" company profile',
-            f'site:crunchbase.com "{company_name}" funding investors',
-            f'site:crunchbase.com "{company_name}" board members',
-            f'site:crunchbase.com "{company_name}" management team',
-            f'site:crunchbase.com "{company_name}" key people',
-            f'"{company_name}" crunchbase executives leadership',
-            f'"{company_name}" crunchbase CEO CFO CTO',
-            f'"{company_name}" crunchbase company information',
-            f'"{company_name}" crunchbase profile management'
+            f'site:crunchbase.com "{company_name}" company executives',
+            f'site:crunchbase.com "{company_name}" corporation CEO CFO',
+            f'site:crunchbase.com "{company_name}" company leadership team',
+            f'site:crunchbase.com "{company_name}" company profile business',
+            f'site:crunchbase.com "{company_name}" company funding investors',
+            f'site:crunchbase.com "{company_name}" corporation board members',
+            f'site:crunchbase.com "{company_name}" company management team',
+            f'site:crunchbase.com "{company_name}" business key people',
+            f'"{company_name}" company crunchbase executives leadership',
+            f'"{company_name}" corporation crunchbase CEO CFO CTO',
+            f'"{company_name}" business crunchbase company information',
+            f'"{company_name}" company crunchbase profile management'
         ]
         
-        # AGGRESSIVE PITCHBOOK SEARCHES - Essential for private equity and executive data
+        # AGGRESSIVE PITCHBOOK SEARCHES - Company-specific for private equity and executive data
         pitchbook_queries = [
-            f'site:pitchbook.com "{company_name}" executives',
-            f'site:pitchbook.com "{company_name}" management team',
-            f'site:pitchbook.com "{company_name}" CEO CFO',
-            f'site:pitchbook.com "{company_name}" company profile',
-            f'site:pitchbook.com "{company_name}" leadership',
-            f'site:pitchbook.com "{company_name}" board directors',
-            f'site:pitchbook.com "{company_name}" private equity',
-            f'site:pitchbook.com "{company_name}" key personnel',
-            f'"{company_name}" pitchbook executives management',
-            f'"{company_name}" pitchbook CEO CFO leadership',
-            f'"{company_name}" pitchbook company data',
-            f'"{company_name}" pitchbook private company'
+            f'site:pitchbook.com "{company_name}" company executives',
+            f'site:pitchbook.com "{company_name}" corporation management team',
+            f'site:pitchbook.com "{company_name}" company CEO CFO',
+            f'site:pitchbook.com "{company_name}" company profile business',
+            f'site:pitchbook.com "{company_name}" company leadership',
+            f'site:pitchbook.com "{company_name}" corporation board directors',
+            f'site:pitchbook.com "{company_name}" company private equity',
+            f'site:pitchbook.com "{company_name}" business key personnel',
+            f'"{company_name}" company pitchbook executives management',
+            f'"{company_name}" corporation pitchbook CEO CFO leadership',
+            f'"{company_name}" business pitchbook company data',
+            f'"{company_name}" company pitchbook private company'
         ]
         
-        # AGGRESSIVE LINKEDIN SEARCHES - Critical for current executive information
+        # AGGRESSIVE LINKEDIN SEARCHES - Company-specific for current executive information
         linkedin_queries = [
-            f'site:linkedin.com "{company_name}" CEO',
-            f'site:linkedin.com "{company_name}" CFO',
-            f'site:linkedin.com "{company_name}" CTO',
-            f'site:linkedin.com "{company_name}" executives',
-            f'site:linkedin.com "{company_name}" leadership team',
-            f'site:linkedin.com "{company_name}" management',
-            f'site:linkedin.com "{company_name}" company page',
-            f'site:linkedin.com "{company_name}" board members',
-            f'site:linkedin.com "{company_name}" senior management',
-            f'site:linkedin.com "{company_name}" C-suite',
-            f'"{company_name}" linkedin CEO profile',
-            f'"{company_name}" linkedin CFO executive',
-            f'"{company_name}" linkedin company executives',
-            f'"{company_name}" linkedin leadership team',
-            f'"{company_name}" linkedin management profiles'
+            f'site:linkedin.com "{company_name}" company CEO',
+            f'site:linkedin.com "{company_name}" corporation CFO',
+            f'site:linkedin.com "{company_name}" company CTO',
+            f'site:linkedin.com "{company_name}" company executives',
+            f'site:linkedin.com "{company_name}" corporation leadership team',
+            f'site:linkedin.com "{company_name}" company management',
+            f'site:linkedin.com/company "{company_name}"',
+            f'site:linkedin.com "{company_name}" corporation board members',
+            f'site:linkedin.com "{company_name}" company senior management',
+            f'site:linkedin.com "{company_name}" business C-suite',
+            f'"{company_name}" company linkedin CEO profile',
+            f'"{company_name}" corporation linkedin CFO executive',
+            f'"{company_name}" business linkedin company executives',
+            f'"{company_name}" company linkedin leadership team',
+            f'"{company_name}" corporation linkedin management profiles'
         ]
         
-        # Enhanced data source queries
+        # COMPANY-SPECIFIC enhanced data source queries
         source_queries = [
-            f'site:bloomberg.com "{company_name}" profile',
-            f'site:reuters.com "{company_name}" company',
-            f'site:yahoo.com "{company_name}" profile',
-            f'site:opencorporates.com "{company_name}"'
+            f'site:bloomberg.com "{company_name}" company profile',
+            f'site:reuters.com "{company_name}" corporation company',
+            f'site:yahoo.com "{company_name}" company profile',
+            f'site:opencorporates.com "{company_name}" corporation'
         ]
         
-        # Business information queries
+        # COMPANY-SPECIFIC business information queries
         business_queries = [
-            f'"{company_name}" products services business',
-            f'"{company_name}" industry sector business type',
-            f'"{company_name}" corporate website official',
-            f'"{company_name}" founded established history'
+            f'"{company_name}" company products services business',
+            f'"{company_name}" corporation industry sector business type',
+            f'"{company_name}" company corporate website official',
+            f'"{company_name}" corporation founded established history'
         ]
         
-        # Name variation queries
+        # COMPANY-SPECIFIC name variation queries with business entity suffixes
         variations = []
         if "Inc" not in company_name and "Corp" not in company_name:
             variations.extend([
-                f'"{company_name} Inc" SEC filings',
-                f'"{company_name} Corporation" Wikipedia',
-                f'"{company_name} Corp" company information'
+                f'"{company_name} Inc" company SEC filings',
+                f'"{company_name} Corporation" company Wikipedia',
+                f'"{company_name} Corp" company information',
+                f'"{company_name} LLC" business entity',
+                f'"{company_name} Ltd" corporation company'
             ])
         
-        # Combine all optimized queries with new aggressive searches prioritized
+        # EXCLUSION-ENHANCED queries to filter out people, products, places
+        exclusion_queries = [
+            f'"{company_name}" company business -person -individual -biography',
+            f'"{company_name}" corporation entity -product -service -location',
+            f'"{company_name}" business headquarters -celebrity -athlete -politician',
+            f'"{company_name}" company profile -personal -individual -biography'
+        ]
+        
+        # Combine all COMPANY-SPECIFIC optimized queries with exclusions prioritized
         all_queries = (
             core_queries +
+            exclusion_queries +       # HIGH PRIORITY: Filter out non-company entities
             registration_queries +
             form_10k_queries +
             form_20f_queries +
@@ -573,25 +594,27 @@ class OptimizedCompanySearcher:
             all_search_results = []
             for i, query in enumerate(search_queries):
                 # Higher result counts for proven successful query types
-                if i < 4:  # Core queries
+                if i < 6:  # Core queries (increased from 4 to 6)
                     num_results = 12
-                elif i < 12:  # Registration queries (highest priority)
+                elif i < 10:  # Exclusion queries (NEW - filter non-company entities)
                     num_results = 15
-                elif i < 20:  # FORM 10-K queries (high priority for non-listed companies)
+                elif i < 18:  # Registration queries (highest priority)
                     num_results = 15
-                elif i < 28:  # FORM 20-F queries (high priority for foreign companies)
+                elif i < 26:  # FORM 10-K queries (high priority for non-listed companies)
                     num_results = 15
-                elif i < 36:  # FORM 8-K queries (high priority for current events)
+                elif i < 34:  # FORM 20-F queries (high priority for foreign companies)
+                    num_results = 15
+                elif i < 42:  # FORM 8-K queries (high priority for current events)
                     num_results = 12
-                elif i < 44:  # DEF 14A Proxy queries (high priority for executive data)
+                elif i < 50:  # DEF 14A Proxy queries (high priority for executive data)
                     num_results = 12
-                elif i < 56:  # CRUNCHBASE queries (CRITICAL for private company executives)
+                elif i < 62:  # CRUNCHBASE queries (CRITICAL for private company executives)
                     num_results = 15
-                elif i < 68:  # PITCHBOOK queries (CRITICAL for private equity data)
+                elif i < 74:  # PITCHBOOK queries (CRITICAL for private equity data)
                     num_results = 15
-                elif i < 83:  # LINKEDIN queries (CRITICAL for current executive profiles)
+                elif i < 89:  # LINKEDIN queries (CRITICAL for current executive profiles)
                     num_results = 15
-                elif i < 88:  # Identifier queries
+                elif i < 94:  # Identifier queries
                     num_results = 10
                 else:  # Other queries
                     num_results = 8

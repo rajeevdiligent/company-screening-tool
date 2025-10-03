@@ -1,0 +1,61 @@
+{
+  "company_name": "Diligent",
+  "legal_name": "Diligent Corporation",
+  "official_name": "",
+  "registration_number": "001-34756",
+  "incorporation_date": "1994-01-01",
+  "incorporation_country": "United States",
+  "jurisdiction": "Delaware, United States",
+  "business_type": "Corporation",
+  "industry": "Software as a Service (SaaS)",
+  "headquarters": "1111 19th Street NW, Suite 700, Washington, DC 20036, USA",
+  "address": "",
+  "website": "https://www.diligent.com/",
+  "description": "Diligent Corporation is a software as a service company that enables groups to share and collaborate information for board meetings. It is a modern governance company providing comprehensive governance software.",
+  "products_services": [
+    "Governance software",
+    "Board management software",
+    "Secure data exchange for board of directors"
+  ],
+  "alternate_names": [
+    "Diligent"
+  ],
+  "identifiers": {
+    "LEI": "Not available",
+    "DUNS": "Not available",
+    "EIN": "Not available",
+    "CIK": "1433269"
+  },
+  "key_executives": [
+    "Brian Stafford - CEO",
+    "David Kenny - CFO"
+  ],
+  "subsidiaries": [
+    "Brainloop"
+  ],
+  "parent_company": "Not applicable",
+  "stock_symbol": "Not available",
+  "market_cap": "Not available",
+  "revenue": "",
+  "annual_revenue": "Not available",
+  "employees": "Not available",
+  "founded_year": "1994",
+  "regulatory_filings": [
+    "https://www.sec.gov/Archives/edgar/data/1433269/000104746916011110/a2227754z10-k.htm"
+  ],
+  "sources": [
+    "https://www.diligent.com/company/about-us",
+    "https://www.diligent.com/",
+    "https://www.sec.gov/Archives/edgar/data/1433269/000104746916011110/a2227754z10-k.htm",
+    "https://en.wikipedia.org/wiki/Daily_News_and_Analysis",
+    "https://en.wikipedia.org/wiki/Doron_Kempel",
+    "https://en.wikipedia.org/wiki/Category:Financial_software_companies",
+    "https://www.wikiwand.com/en/Talk:Diligent_Corporation",
+    "https://en.wikipedia.org/wiki/File_talk:Diligent_Corporation_company_logo.png",
+    "https://en.wikipedia.org/wiki/Brian_Stafford_(businessman)",
+    "https://en.wikipedia.org/wiki/Diligent_Corporation",
+    "https://www.linkedin.com/company/diligentglobal"
+  ],
+  "confidence_level": "High",
+  "last_updated": "2025-10-03T21:52:59.556814"
+}
