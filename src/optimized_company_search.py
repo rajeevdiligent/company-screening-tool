@@ -50,6 +50,11 @@ try:
 except ImportError:
     SearchBasedSECExtractor = None
 
+try:
+    from enhanced_executive_extractor import EnhancedExecutiveExtractor
+except ImportError:
+    EnhancedExecutiveExtractor = None
+
 # Load environment variables
 load_dotenv()
 
@@ -392,6 +397,7 @@ class OptimizedCompanySearcher:
         self.nova_llm = None
         self.sec_enhancer = None
         self.search_sec_extractor = None
+        self.enhanced_exec_extractor = None
         self._initialize_services()
     
     def _initialize_services(self):
@@ -420,6 +426,13 @@ class OptimizedCompanySearcher:
             logger.info("SEC filing enhancer initialized as fallback")
         else:
             logger.warning("SEC filing enhancer not available")
+        
+        # Initialize enhanced executive extractor with Serper API
+        if EnhancedExecutiveExtractor:
+            self.enhanced_exec_extractor = EnhancedExecutiveExtractor(serper_api_key=serper_key)
+            logger.info("Enhanced executive extractor initialized with Serper API")
+        else:
+            logger.warning("Enhanced executive extractor not available")
         
         logger.info("All services initialized successfully")
     
@@ -593,7 +606,7 @@ class OptimizedCompanySearcher:
         
         return all_queries
     
-    async def search_company(self, company_name: str) -> CompanyInfo:
+    async def search_company(self, company_name: str, location: str = None) -> CompanyInfo:
         """Perform optimized company search with SEC data prioritized"""
         logger.info(f"Starting optimized search for: {company_name}")
         
@@ -651,32 +664,105 @@ class OptimizedCompanySearcher:
             
             logger.info(f"Found {len(unique_results)} unique search results")
             
-            # STEP 2A: Extract SEC data directly from search results (PRIMARY METHOD)
+            # Store search results for potential SEC executive extraction
+            self._latest_search_results = unique_results
+            
+            # STEP 2A: Extract SEC data directly from search results (for company data, NOT executives)
             if unique_results and self.search_sec_extractor:
                 try:
-                    logger.info("STEP 2A: Extracting SEC data from search results")
+                    logger.info("STEP 2A: Extracting SEC data from search results (excluding executives)")
                     company_dict = asdict(company_info)
-                    enhanced_dict = self.search_sec_extractor.enhance_company_data_from_search(
+                    enhanced_dict = self.search_sec_extractor.enhance_company_data_from_search_no_executives(
                         company_dict, unique_results, company_name
                     )
                     
-                    # Update company_info with search-extracted SEC data
+                    # Update company_info with search-extracted SEC data (excluding executives)
                     for key, value in enhanced_dict.items():
-                        if hasattr(company_info, key):
+                        if hasattr(company_info, key) and key != 'key_executives':
                             setattr(company_info, key, value)
                     
-                    logger.info("Search-based SEC extraction completed")
+                    logger.info("Search-based SEC extraction completed (executives excluded)")
                 except Exception as e:
                     logger.error(f"Search-based SEC extraction failed: {e}")
             
-            # STEP 2B: Analyze with Nova LLM
+            # STEP 2B: Analyze with Nova LLM (for company data, NOT executives)
             if unique_results:
                 analysis = self.nova_llm.analyze_company_data(unique_results, company_name)
                 
                 if 'error' not in analysis:
-                    self._update_company_info(company_info, analysis, unique_results)
+                    self._update_company_info_no_executives(company_info, analysis, unique_results)
                 else:
                     logger.error(f"LLM analysis failed: {analysis['error']}")
+            
+            # STEP 2C: EXCLUSIVE Executive Extraction from Company Website using Serper
+            if self.enhanced_exec_extractor:
+                try:
+                    logger.info("STEP 2C: EXCLUSIVE executive extraction from company website using Serper")
+                    
+                    # Get website URL for executive extraction
+                    website_url = company_info.website if company_info.website and company_info.website != "Not available" else None
+                    
+                    if website_url:
+                        # Determine location for search strategy
+                        # Use provided location parameter, or auto-detect from incorporation country
+                        if location:
+                            detected_location = location
+                        else:
+                            detected_location = "US" if company_info.incorporation_country and "United States" in company_info.incorporation_country else None
+                        
+                        # Determine if company is currently publicly listed
+                        # Must have stock symbol AND not be "Not applicable" or similar
+                        has_active_stock_symbol = (
+                            company_info.stock_symbol and 
+                            company_info.stock_symbol not in ["Not applicable", "Not available", "N/A", "None", ""]
+                        )
+                        is_public_company = has_active_stock_symbol
+                        
+                        if detected_location == "US" and is_public_company:
+                            # US Public Company: Extract executives from SEC filings
+                            logger.info(f"🏛️ US PUBLIC COMPANY: Extracting executives from SEC filings for {company_name}")
+                            website_executives = self._extract_executives_from_sec_data(company_info)
+                        else:
+                            # US Private Company or Non-US Company: Extract from website
+                            if detected_location == "US":
+                                logger.info(f"🏢 US PRIVATE COMPANY: Extracting executives from website leadership pages for {company_name}")
+                            else:
+                                logger.info(f"🌍 NON-US COMPANY: Extracting executives from website for {company_name}")
+                            
+                            website_executives = await self.enhanced_exec_extractor.extract_executives_website_only(
+                                company_name=company_name,
+                                website_url=website_url,
+                                location=detected_location
+                            )
+                        
+                        if website_executives:
+                            # Format executives for output based on type
+                            if isinstance(website_executives[0], str):
+                                # Already formatted strings from SEC extraction
+                                company_info.key_executives = website_executives
+                            else:
+                                # ExecutiveProfile objects from website extraction
+                                formatted_executives = self.enhanced_exec_extractor.format_executives_for_output(website_executives)
+                                company_info.key_executives = formatted_executives
+                            # Log results based on extraction type
+                            if isinstance(website_executives[0], str):
+                                logger.info(f"✅ SEC EXTRACTION: Found {len(website_executives)} executives from SEC filings")
+                                for exec in website_executives:
+                                    logger.info(f"   • {exec}")
+                            else:
+                                logger.info(f"✅ WEBSITE-ONLY EXTRACTION: Found {len(formatted_executives)} executives from company website")
+                                for exec in website_executives:
+                                    logger.info(f"   • {exec.name} - {exec.role} (Source: Website)")
+                        else:
+                            logger.info("No executives found on company website")
+                            company_info.key_executives = []
+                    else:
+                        logger.warning("No website URL available for executive extraction")
+                        company_info.key_executives = []
+                        
+                except Exception as e:
+                    logger.error(f"Website executive extraction failed: {e}")
+                    company_info.key_executives = []
             
             # STEP 3: FALLBACK SEC API LOOKUP (only if search-based extraction missed data)
             if self.sec_enhancer:
@@ -737,9 +823,20 @@ class OptimizedCompanySearcher:
             if analysis_key in analysis and analysis[analysis_key]:
                 setattr(company_info, info_key, analysis[analysis_key])
         
-        # Handle list and dict fields
+        # Handle list and dict fields - merge instead of replace
         if 'key_executives' in analysis and analysis['key_executives']:
-            company_info.key_executives = analysis['key_executives']
+            # Merge executives from LLM analysis with existing ones
+            existing_executives = company_info.key_executives or []
+            existing_names = {exec.split(' - ')[0].strip().lower() for exec in existing_executives}
+            
+            for exec in analysis['key_executives']:
+                exec_name = exec.split(' - ')[0].strip().lower()
+                if exec_name not in existing_names:
+                    existing_executives.append(exec)
+                    existing_names.add(exec_name)
+            
+            company_info.key_executives = existing_executives
+            logger.info(f"🔄 LLM: Merged executives, total now: {len(existing_executives)}")
         
         if 'subsidiaries' in analysis and analysis['subsidiaries']:
             company_info.subsidiaries = analysis['subsidiaries']
@@ -765,11 +862,106 @@ class OptimizedCompanySearcher:
         
         company_info.sources = list(set(sources))  # Remove duplicates
     
+    def _update_company_info_no_executives(self, company_info: CompanyInfo, analysis: Dict, search_results: List[Dict]):
+        """Update company info with analysis results (excluding executives)"""
+        
+        # Map all fields from analysis (excluding executives)
+        field_mapping = {
+            'legal_name': 'legal_name',
+            'registration_number': 'registration_number',
+            'incorporation_date': 'incorporation_date',
+            'incorporation_country': 'incorporation_country',
+            'jurisdiction': 'jurisdiction',
+            'business_type': 'business_type',
+            'industry': 'industry',
+            'headquarters': 'headquarters',
+            'website': 'website',
+            'description': 'description',
+            'products_services': 'products_services',
+            'parent_company': 'parent_company',
+            'stock_symbol': 'stock_symbol',
+            'market_cap': 'market_cap',
+            'annual_revenue': 'annual_revenue',
+            'employees': 'employees',
+            'founded_year': 'founded_year',
+            'confidence_level': 'confidence_level'
+        }
+        
+        for analysis_key, info_key in field_mapping.items():
+            if analysis_key in analysis and analysis[analysis_key]:
+                setattr(company_info, info_key, analysis[analysis_key])
+        
+        # SKIP executives - they will come from website only
+        logger.info("🚫 LLM: Skipping executive data - using website-only extraction")
+        
+        # Handle other list and dict fields
+        if 'subsidiaries' in analysis and analysis['subsidiaries']:
+            company_info.subsidiaries = analysis['subsidiaries']
+            
+        if 'alternate_names' in analysis and analysis['alternate_names']:
+            company_info.alternate_names = analysis['alternate_names']
+        
+        # Add sources
+        sources = company_info.sources or []
+        if 'sources' in analysis and analysis['sources']:
+            sources.extend(analysis['sources'])
+        
+        # Add high-quality sources from search results
+        for result in search_results[:10]:
+            if result.get('link'):
+                sources.append(result['link'])
+        
+        company_info.sources = list(set(sources))  # Remove duplicates
+        
+        logger.info("Company information updated successfully (executives excluded)")
+    
+    def _extract_executives_from_sec_data(self, company_info: CompanyInfo) -> List:
+        """Extract executives from SEC filing data for US public companies"""
+        executives = []
+        
+        try:
+            # Check if we have SEC-extracted executives from the search-based extractor
+            if hasattr(self, 'search_sec_extractor') and self.search_sec_extractor:
+                # Get the latest search results (stored during STEP 2A)
+                if hasattr(self, '_latest_search_results'):
+                    sec_data = self.search_sec_extractor.extract_sec_data_from_search_results(
+                        self._latest_search_results, 
+                        company_info.legal_name or company_info.name
+                    )
+                    
+                    if sec_data.get('executives'):
+                        logger.info(f"✅ SEC: Found {len(sec_data['executives'])} executives from SEC filings")
+                        
+                        # Convert SEC executives to the expected format
+                        for exec_data in sec_data['executives']:
+                            if isinstance(exec_data, dict):
+                                name = exec_data.get('name', '')
+                                role = exec_data.get('role', '')
+                                if name and role:
+                                    executives.append(f"{name} - {role}")
+                            else:
+                                # Handle string format
+                                executives.append(str(exec_data))
+                    else:
+                        logger.warning("📋 SEC: No executives found in SEC filings")
+                else:
+                    logger.warning("📋 SEC: No search results available for SEC extraction")
+            else:
+                logger.warning("📋 SEC: SEC extractor not available")
+                
+        except Exception as e:
+            logger.error(f"❌ SEC: Failed to extract executives from SEC data: {e}")
+        
+        return executives
+    
     def save_results(self, company_info: CompanyInfo, output_file: str = None):
         """Save optimized search results"""
         if not output_file:
             safe_name = "".join(c for c in company_info.company_name if c.isalnum() or c in (' ', '-', '_')).rstrip()
-            output_file = f"optimized_search_{safe_name.replace(' ', '_')}.json"
+            # Ensure outputjson directory exists
+            import os
+            os.makedirs('outputjson', exist_ok=True)
+            output_file = f"outputjson/optimized_search_{safe_name.replace(' ', '_')}.json"
         
         try:
             with open(output_file, 'w', encoding='utf-8') as f:
@@ -786,6 +978,7 @@ async def main():
     """Main function for optimized company search"""
     parser = argparse.ArgumentParser(description='Optimized company information extraction')
     parser.add_argument('--company', '-c', required=True, help='Company name to research')
+    parser.add_argument('--location', '-l', help='Company location (e.g., US, UK, etc.)')
     parser.add_argument('--output', '-o', help='Output JSON file path')
     parser.add_argument('--verbose', '-v', action='store_true', help='Enable verbose logging')
     
@@ -802,7 +995,7 @@ async def main():
         print(f"🔍 Performing optimized search for: {args.company}")
         print("📊 Using proven successful patterns from Tesla and Walmart extractions...")
         
-        company_info = await searcher.search_company(args.company)
+        company_info = await searcher.search_company(args.company, location=args.location)
         
         # Save results
         output_file = searcher.save_results(company_info, args.output)

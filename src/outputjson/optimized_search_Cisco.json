@@ -1,0 +1,71 @@
+{
+  "company_name": "Cisco",
+  "legal_name": "Cisco Systems, Inc.",
+  "official_name": "",
+  "registration_number": "0000858877",
+  "incorporation_date": "1984-12-10",
+  "incorporation_country": "United States",
+  "jurisdiction": "Delaware, United States",
+  "business_type": "Corporation",
+  "industry": "Technology",
+  "headquarters": "170 West Tasman Drive, San Jose, CA 95134-170, USA",
+  "address": "",
+  "website": "https://www.cisco.com",
+  "description": "Cisco Systems, Inc. (using the trademark Cisco) is an American multinational digital communications technology conglomerate corporation headquartered in San Jose, California. It develops, manufactures, and sells networking hardware, telecommunications equipment, and other high-technology services and products.",
+  "products_services": [
+    "Networking hardware",
+    "Telecommunications equipment",
+    "High-technology services and products"
+  ],
+  "alternate_names": [
+    "Cisco"
+  ],
+  "identifiers": {
+    "CIK": "0000858877"
+  },
+  "key_executives": [
+    "Chuck Robbins - Chairman and CEO",
+    "Scott Herren - CFO",
+    "Jeetu Patel - Executive Vice President and General Manager, Security and Collaboration",
+    "Jonathan Davidson - Executive Vice President and General Manager, Mass-Scale Infrastructure Group",
+    "Liz Centoni - Executive Vice President and General Manager, Cloud and AI Infrastructure",
+    "Todd Nightingale - Executive Vice President and General Manager, Enterprise Networking and Cloud",
+    "Dev Stahlkopf - Executive Vice President and General Counsel"
+  ],
+  "subsidiaries": [
+    "Cisco Meraki",
+    "Cisco Talos",
+    "Webex"
+  ],
+  "parent_company": "None",
+  "stock_symbol": "CSCO",
+  "market_cap": "USD 210 billion (as of October 2024)",
+  "revenue": "",
+  "annual_revenue": "USD 57.0 billion (fiscal year 2024)",
+  "employees": "84,900 (as of July 2024)",
+  "founded_year": "1984",
+  "regulatory_filings": [
+    "https://www.sec.gov/Archives/edgar/data/858877/000085887722000013/csco-20220730.htm",
+    "https://www.sec.gov/Archives/edgar/data/858877/000085887725000033/csco-20250426.htm",
+    "https://www.sec.gov/Archives/edgar/data/858877/000085887720000010/csco-2020725x10k.htm",
+    "https://www.sec.gov/Archives/edgar/data/858877/000085887721000013/0000858877-21-000013-index.htm",
+    "https://www.sec.gov/Archives/edgar/data/858877/000085887725000111/csco-20250726.htm"
+  ],
+  "sources": [
+    "https://en.wikipedia.org/wiki/Cisco_Meraki",
+    "https://www.cisco.com/site/us/en/about/index.html",
+    "https://en.wikipedia.org/wiki/Sysco",
+    "https://investor.cisco.com/financial-information/sec-filings/default.aspx",
+    "https://en.wikipedia.org/wiki/Cisco_Videoscape",
+    "https://en.wikipedia.org/wiki/Cisco_Talos",
+    "https://en.wikipedia.org/wiki/Webex",
+    "https://en.wikipedia.org/wiki/List_of_Cisco_products",
+    "https://www.sec.gov/Archives/edgar/data/858877/000085887722000013/csco-20220730.htm",
+    "https://simple.wikipedia.org/wiki/Cisco_Systems",
+    "https://en.wikipedia.org/wiki/Cisco",
+    "https://en.wikipedia.org/wiki/List_of_acquisitions_by_Cisco",
+    "https://ms.wikipedia.org/wiki/Cisco_Systems"
+  ],
+  "confidence_level": "High",
+  "last_updated": "2025-10-06T11:57:19.237682"
+}

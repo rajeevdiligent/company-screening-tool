@@ -10,6 +10,10 @@ urllib3==2.0.7
 certifi==2023.11.17
 idna==3.6
 
+# Enhanced executive extractor dependencies
+beautifulsoup4==4.12.2
+aiohttp==3.9.1
+
 # JSON handling (built into Python 3.9+)
 # asyncio (built into Python 3.9+)
 # logging (built into Python 3.9+)

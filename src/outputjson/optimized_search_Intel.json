@@ -1,0 +1,78 @@
+{
+  "company_name": "Intel",
+  "legal_name": "Intel Corporation",
+  "official_name": "",
+  "registration_number": "001-06198",
+  "incorporation_date": "1968-07-18",
+  "incorporation_country": "United States",
+  "jurisdiction": "Delaware, United States",
+  "business_type": "Corporation",
+  "industry": "Semiconductor",
+  "headquarters": "2200 Mission College Blvd, Santa Clara, CA 95054, USA",
+  "address": "",
+  "website": "https://www.intel.com",
+  "description": "Intel Corporation designs, manufactures, and sells computer chips and related products.",
+  "products_services": [
+    "Microprocessors",
+    "Motherboards",
+    "Graphics chips",
+    "Networking products",
+    "Solid-state drives",
+    "Memory and storage products",
+    "Internet of Things (IoT) solutions",
+    "Artificial Intelligence (AI) solutions"
+  ],
+  "alternate_names": [
+    "Integrated Electronics Corporation"
+  ],
+  "identifiers": {
+    "CIK": "0000050863"
+  },
+  "key_executives": [
+    "Pat Gelsinger - CEO",
+    "Can Its New - CEO",
+    "Interim Co - CEO",
+    "Pay Ratio Pay - CEO",
+    "Executive Compensation Tables - CEO",
+    "Ming Yang - CFO",
+    "Chief Financial Officer - CFO",
+    "Mark Henninger - CFO",
+    "Michelle Johnston Holthaus - CEO",
+    "David Zinsner - CFO"
+  ],
+  "subsidiaries": [
+    "Mobileye",
+    "Intel Capital",
+    "Intel Security Group"
+  ],
+  "parent_company": "Not applicable",
+  "stock_symbol": "INTC",
+  "market_cap": "Not available",
+  "revenue": "",
+  "annual_revenue": "Not available",
+  "employees": "Not available",
+  "founded_year": "1968",
+  "regulatory_filings": [
+    "https://www.sec.gov/Archives/edgar/data/50863/000005086323000006/intc-20221231.htm",
+    "https://www.sec.gov/Archives/edgar/data/50863/000005086324000010/intc-20231230.htm",
+    "https://www.sec.gov/Archives/edgar/data/50863/000119312513065416/d424446d10k.htm",
+    "https://www.sec.gov/Archives/edgar/data/50863/000005086325000009/0000050863-25-000009-index.htm",
+    "https://www.sec.gov/Archives/edgar/data/50863/000005086316000105/a10kdocument12262015q4.htm"
+  ],
+  "sources": [
+    "https://en.wikipedia.org/wiki/Intel",
+    "https://sco.wikipedia.org/wiki/Intel",
+    "https://en.wikipedia.org/wiki/List_of_Intel_manufacturing_sites",
+    "https://da.wikipedia.org/wiki/d:Q248",
+    "https://en.wikipedia.org/wiki/Timeline_of_Intel",
+    "https://simple.wikipedia.org/wiki/Intel",
+    "https://en.wikipedia.org/wiki/Intel_Capital",
+    "https://en.wikipedia.org/wiki/Intel_4004",
+    "https://en.wikipedia.org/wiki/List_of_mergers_and_acquisitions_by_Intel",
+    "https://en.wikipedia.org/wiki/Intel_Corporation_v_CPM_United_Kingdom_Ltd.",
+    "https://ms.wikipedia.org/wiki/Intel_Corporation",
+    "https://www.intel.com/content/www/us/en/homepage.html"
+  ],
+  "confidence_level": "High",
+  "last_updated": "2025-10-06T11:37:17.319393"
+}

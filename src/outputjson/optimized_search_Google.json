@@ -1,0 +1,76 @@
+{
+  "company_name": "Google",
+  "legal_name": "Alphabet Inc.",
+  "official_name": "",
+  "registration_number": "001-37580",
+  "incorporation_date": "2015-10-02",
+  "incorporation_country": "United States",
+  "jurisdiction": "Delaware, United States",
+  "business_type": "Corporation",
+  "industry": "Technology",
+  "headquarters": "1600 Amphitheatre Parkway, Mountain View, California, United States",
+  "address": "",
+  "website": "https://www.google.com",
+  "description": "Google LLC is an American multinational technology company specializing in internet-related services and products, which include online advertising technologies, search, cloud computing, software, and hardware.",
+  "products_services": [
+    "Search Engine",
+    "Online Advertising",
+    "Cloud Computing",
+    "Software",
+    "Hardware"
+  ],
+  "alternate_names": [
+    "Google Inc."
+  ],
+  "identifiers": {
+    "CIK": "0001652044"
+  },
+  "key_executives": [
+    "Sundar Pichai - CEO of Alphabet and Google",
+    "Ruth Porat - CFO of Alphabet",
+    "Thomas Kurian - CEO of Google Cloud",
+    "Susan Wojcicki - Former CEO of YouTube",
+    "Prabhakar Raghavan - Senior Vice President, Google Search",
+    "Hiroshi Lockheimer - Senior Vice President, Platforms & Ecosystems",
+    "Kent Walker - President of Global Affairs and Chief Legal Officer"
+  ],
+  "subsidiaries": [
+    "YouTube",
+    "Android",
+    "Google Cloud",
+    "Waymo"
+  ],
+  "parent_company": "None",
+  "stock_symbol": "GOOGL",
+  "market_cap": "USD 2.1 trillion (as of October 2024)",
+  "revenue": "",
+  "annual_revenue": "USD 307.4 billion (2023)",
+  "employees": "182,502 (as of December 2023)",
+  "founded_year": "1998",
+  "regulatory_filings": [
+    "https://www.sec.gov/Archives/edgar/data/1652044/000165204423000016/goog-20221231.htm",
+    "https://www.sec.gov/Archives/edgar/data/1288776/000119312510030774/d10k.htm",
+    "https://www.sec.gov/Archives/edgar/data/1288776/000119312512025336/d260164d10k.htm",
+    "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000043/goog-20250331.htm",
+    "https://www.sec.gov/Archives/edgar/data/1652044/000165204422000019/goog-20211231.htm"
+  ],
+  "sources": [
+    "https://en.wikipedia.org/wiki/Google",
+    "https://www.sec.gov/Archives/edgar/data/1652044/000165204423000016/goog-20221231.htm",
+    "https://en.wikipedia.org/wiki/History_of_Google",
+    "https://en.wikipedia.org/wiki/Googleplex",
+    "https://simple.wikipedia.org/wiki/Google",
+    "https://id.wikipedia.org/wiki/Alphabet_Inc.",
+    "https://en.wikipedia.org/wiki/Alphabet_Inc.",
+    "https://abc.xyz/assets/77/51/9841ad5c4fbe85b4440c47a4df8d/goog-10-k-2024.pdf",
+    "https://play.google.com/store/apps/details?id=org.wikipedia&hl=en_US",
+    "https://sco.wikipedia.org/wiki/Alphabet_Inc.",
+    "https://en.wikipedia.org/wiki/Don%27t_be_evil",
+    "https://en.wikipedia.org/wiki/Big_Tech",
+    "https://id.wikipedia.org/wiki/Google",
+    "https://en.wikipedia.org/wiki/Outline_of_Google",
+    "https://sco.wikipedia.org/wiki/Google"
+  ],
+  "confidence_level": "High",
+  "last_updated": "2025-10-06T12:18:59.696955"
+}

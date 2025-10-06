@@ -258,13 +258,62 @@ class SearchBasedSECExtractor:
                         
                         executive_entry = f"{name} - {role}"
                         
-                        # Avoid duplicates
-                        if name not in found_names and len(name.split()) >= 2:
+                        # Avoid duplicates and filter out invalid names
+                        if (name not in found_names and 
+                            len(name.split()) >= 2 and 
+                            self._is_valid_executive_name(name)):
                             executives.append(executive_entry)
                             found_names.add(name)
                             logger.info(f"✅ Executive extracted: {executive_entry}")
         
         return executives[:10]  # Limit to top 10 executives
+    
+    def _is_valid_executive_name(self, name: str) -> bool:
+        """Check if the extracted name looks like a valid executive name"""
+        if not name or len(name.strip()) < 3:
+            return False
+        
+        # Split into words
+        words = name.strip().split()
+        if len(words) < 2 or len(words) > 4:
+            return False
+        
+        # Check for invalid patterns
+        invalid_patterns = [
+            r'^rs\b',  # Starts with 'rs' (common extraction error)
+            r'^ry\b',  # Starts with 'ry' (common extraction error)
+            r'^of\b',  # Starts with 'of'
+            r'^and\b', # Starts with 'and'
+            r'^the\b', # Starts with 'the'
+            r'\b(corporation|company|inc|ltd|llc)\b',  # Contains company words
+            r'\b(diligent|intel|microsoft|apple)\b',   # Contains company names
+            r'^\w{1,2}\s',  # Very short first word (1-2 chars)
+        ]
+        
+        name_lower = name.lower()
+        for pattern in invalid_patterns:
+            if re.search(pattern, name_lower):
+                return False
+        
+        # Each word should start with capital letter and be reasonable length
+        for word in words:
+            if not word[0].isupper() or len(word) < 2:
+                return False
+            # Check if word contains only letters (no numbers or special chars)
+            if not re.match(r'^[A-Za-z]+$', word):
+                return False
+        
+        # Check for common valid name patterns
+        # First name + Last name (minimum)
+        if len(words) >= 2:
+            first_name = words[0]
+            last_name = words[-1]
+            
+            # Names should be reasonable length
+            if len(first_name) >= 2 and len(last_name) >= 2:
+                return True
+        
+        return False
     
     def _determine_executive_role(self, pattern: str, text: str, name: str) -> str:
         """Determine executive role based on pattern and context"""
@@ -338,6 +387,30 @@ class SearchBasedSECExtractor:
         else:
             return 'Low'
     
+    def enhance_company_data_from_search_no_executives(self, company_data: Dict, search_results: List[Dict], company_name: str) -> Dict:
+        """Extract SEC data from search results (excluding executives)"""
+        logger.info(f"🔍 Extracting SEC data from {len(search_results)} search results for {company_name} (executives excluded)")
+        
+        sec_data = self.extract_sec_data_from_search_results(search_results, company_name)
+        
+        if sec_data['cik']:
+            company_data['identifiers'] = company_data.get('identifiers', {})
+            company_data['identifiers']['CIK'] = sec_data['cik']
+            logger.info(f"✅ SEARCH-BASED: Added CIK {sec_data['cik']} for {company_name}")
+        
+        if sec_data['registration_number']:
+            company_data['registration_number'] = sec_data['registration_number']
+            logger.info(f"✅ SEARCH-BASED: Added registration number {sec_data['registration_number']} for {company_name}")
+        
+        if sec_data['sec_filings']:
+            company_data['regulatory_filings'] = sec_data['sec_filings']
+            logger.info(f"✅ SEARCH-BASED: Added {len(sec_data['sec_filings'])} SEC filings for {company_name}")
+        
+        # SKIP executives - they will come from website only
+        logger.info(f"🚫 SEARCH-BASED: Skipping {len(sec_data.get('executives', []))} executives - using website-only extraction")
+        
+        return company_data
+
     def enhance_company_data_from_search(self, company_data: Dict, search_results: List[Dict], company_name: str) -> Dict:
         """
         Enhance company data with SEC information extracted from search results
@@ -366,20 +439,21 @@ class SearchBasedSECExtractor:
                 company_data['regulatory_filings'] = sec_data['sec_filings']
                 logger.info(f"✅ SEARCH-BASED: Added {len(sec_data['sec_filings'])} SEC filings for {company_name}")
             
-            if sec_data['executives'] and (not company_data.get('key_executives') or 
-                                          len(company_data.get('key_executives', [])) < len(sec_data['executives'])):
-                # Merge executives, avoiding duplicates
+            if sec_data['executives']:
+                # Always merge executives, avoiding duplicates
                 existing_executives = company_data.get('key_executives', [])
-                existing_names = {exec.split(' - ')[0].strip() for exec in existing_executives}
+                existing_names = {exec.split(' - ')[0].strip().lower() for exec in existing_executives}
                 
+                added_count = 0
                 for executive in sec_data['executives']:
-                    exec_name = executive.split(' - ')[0].strip()
+                    exec_name = executive.split(' - ')[0].strip().lower()
                     if exec_name not in existing_names:
                         existing_executives.append(executive)
                         existing_names.add(exec_name)
+                        added_count += 1
                 
                 company_data['key_executives'] = existing_executives
-                logger.info(f"✅ SEARCH-BASED: Added/updated executives for {company_name}: {len(existing_executives)} total")
+                logger.info(f"✅ SEARCH-BASED: Added {added_count} new executives, total now: {len(existing_executives)} for {company_name}")
             
             # Update confidence if we found SEC data
             if sec_data['confidence'] == 'High' and company_data.get('confidence_level') != 'High':

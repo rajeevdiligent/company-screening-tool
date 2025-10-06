@@ -1,0 +1,75 @@
+{
+  "company_name": "NVIDIA",
+  "legal_name": "NVIDIA Corporation",
+  "official_name": "",
+  "registration_number": "0001045810",
+  "incorporation_date": "1993-01-01",
+  "incorporation_country": "United States",
+  "jurisdiction": "Delaware, United States",
+  "business_type": "Corporation",
+  "industry": "Technology",
+  "headquarters": "2701 San Tomas Expressway, Santa Clara, California, 95050, USA",
+  "address": "",
+  "website": "https://www.nvidia.com",
+  "description": "NVIDIA Corporation is an American technology company headquartered in Santa Clara, California. It is known for designing and supplying graphics processing units (GPUs) and other technologies for gaming, professional visualization, data centers, and automotive markets.",
+  "products_services": [
+    "Graphics Processing Units (GPUs)",
+    "AI and Machine Learning Solutions",
+    "Autonomous Vehicle Solutions",
+    "Data Center Solutions",
+    "Professional Visualization Solutions"
+  ],
+  "alternate_names": [
+    "nVIDIA",
+    "nVidia",
+    "NVIDIA Corp"
+  ],
+  "identifiers": {
+    "CIK": "0001045810"
+  },
+  "key_executives": [
+    "Jensen Huang - CEO and Co-Founder",
+    "Colette Kress - CFO",
+    "Ajay Puri - Executive Vice President, Worldwide Field Operations",
+    "Debora Shoquist - Executive Vice President, Operations",
+    "Timothy Teter - General Counsel and Corporate Secretary",
+    "Chris Malachowsky - Co-Founder and Fellow",
+    "William Dally - Chief Scientist and Senior Vice President of Research"
+  ],
+  "subsidiaries": [
+    "Mellanox Technologies",
+    "DeepField Technologies"
+  ],
+  "parent_company": "None",
+  "stock_symbol": "NVDA",
+  "market_cap": "USD 3.4 trillion (as of October 2024)",
+  "revenue": "",
+  "annual_revenue": "USD 60.9 billion (fiscal year 2024)",
+  "employees": "29,600 (as of January 2024)",
+  "founded_year": "1993",
+  "regulatory_filings": [
+    "https://www.sec.gov/Archives/edgar/data/1045810/000104581014000030/0001045810-14-000030-index.htm",
+    "https://www.sec.gov/Archives/edgar/data/1045810/000104581025000023/nvda-20250126.htm",
+    "https://www.sec.gov/Archives/edgar/data/1045810/000104581022000036/nvda-20220130.htm",
+    "https://www.sec.gov/Archives/edgar/data/1045810/000104581024000029/nvda-20240128.htm",
+    "https://www.sec.gov/Archives/edgar/data/1045810/000104581023000017/nvda-20230129.htm"
+  ],
+  "sources": [
+    "https://zh.wikipedia.org/zh-cn/%E8%8B%B1%E4%BC%9F%E8%BE%BE",
+    "https://zh.wikipedia.org/zh-tw/%E8%8B%B1%E4%BC%9F%E8%BE%BE",
+    "https://en.wikipedia.org/wiki/Jensen_Huang",
+    "https://sco.wikipedia.org/wiki/Nvidia",
+    "https://investor.nvidia.com/financial-info/sec-filings/default.aspx",
+    "https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units",
+    "https://en.wikipedia.org/wiki/Big_Tech",
+    "https://www.nvidia.com/en-us/about-nvidia/corporate-timeline/",
+    "https://simple.wikipedia.org/wiki/Nvidia",
+    "https://www.sec.gov/Archives/edgar/data/1045810/000104581025000023/nvda-20250126.htm",
+    "https://en.wikipedia.org/wiki/Nvidia",
+    "https://en.wikipedia.org/wiki/Rambus_Inc._v._Nvidia",
+    "https://www.sec.gov/Archives/edgar/data/1045810/000104581014000030/0001045810-14-000030-index.htm",
+    "https://www.nvidia.com/en-us/about-nvidia/"
+  ],
+  "confidence_level": "High",
+  "last_updated": "2025-10-06T11:47:36.401102"
+}
